@@ -1,3 +1,9 @@
+@if (isLoading()) {
+  <app-loading-spinner />
+}
+@if (error()) {
+  <app-error-card [error]="error()"></app-error-card>
+}
 <main class="max-w-md mx-auto bg-white dark:bg-gray-800 shadow-2xl rounded-2xl space-y-6 text-gray-900 dark:text-gray-100 transition-colors duration-300 p-10">
   <h1 class="text-3xl font-bold text-center">Login</h1>
 
@@ -10,6 +16,7 @@
         id="username"
         class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-maroon-primary focus:border-transparent transition"
         placeholder="Enter your email..."
+        autocomplete="email"
       />
     </div>
 

@@ -1,5 +1,5 @@
 <main class="w-full max-w-md mx-auto bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-6 space-y-6 text-gray-900 dark:text-gray-100 transition-colors duration-300 p-10">
-  <h1 class="text-3xl font-bold text-center">Login</h1>
+  <h1 class="text-3xl font-bold text-center">Register</h1>
 
   <form class="space-y-6">
     <div class="flex flex-col">
@@ -22,7 +22,6 @@
         placeholder="Enter your password..."
         autocomplete="current-password"
       />
-
       <button
         type="button"
         (click)="togglePasswordVisibility()"
@@ -32,30 +31,42 @@
         <i class="{{ showPassword ? 'fas fa-eye-slash' : 'fas fa-eye' }}"></i>
       </button>
     </div>
-    <div class="flex justify-end items-center m-3">
-      <a
-        routerLink="/"
-        class="text-sm text-stone-600 dark:text-stone-400 hover:text-stone-800 dark:hover:text-white hover:underline hover:decoration-2 underline-offset-4 transition-colors duration-200 cursor-pointer"
-      >
-        Ξεχάσατε τον κωδικό σας;
-      </a>
-    </div>
 
+    <div class="flex flex-col relative">
+      <label for="confirmPassword" class="mb-1 font-medium">Confirm Password</label>
+
+      <input
+        [type]="showConfirmPassword ? 'text' : 'password'"
+        id="confirmPassword"
+        class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-maroon-primary focus:border-transparent transition pr-10"
+        placeholder="Enter your password confirmation..."
+        autocomplete="current-password"
+      />
+      <button
+        type="button"
+        (click)="toggleConfirmPasswordVisibility()"
+        class="absolute right-3 top-[50px] transform -translate-y-1/2 text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none"
+        aria-label="Toggle confirm password visibility"
+      >
+        <i class="{{ showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye' }}"></i>
+      </button>
+    </div>
 
     <button
       type="submit"
       class="w-full bg-maroon-primary hover:bg-maroon-light text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 transform hover:scale-105"
     >
-      Login
+      Register
     </button>
   </form>
   <div class="text-center mt-4 text-base text-gray-700 dark:text-gray-300">
-    <span class="pe-1">Δεν έχετε λογαριασμό;</span>
+    <span class="pe-1">Έχετε λογαριασμό; Επιστροφή στην </span>
     <a
-      [routerLink]="['../', 'register']"
+      [routerLink]="['../', 'login']"
       class="font-medium text-maroon-light dark:text-[#e3b8c4] hover:text-maroon-primary dark:hover:text-[#f1c5d1] hover:underline hover:decoration-2 underline-offset-6 transition-colors duration-200"
     >
-      Εγγραφή
+      Σύνδεση
     </a>
   </div>
 </main>
+

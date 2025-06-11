@@ -1,7 +1,7 @@
 <main class="flex flex-col items-center justify-center px-4 text-center">
   <h2 class="text-5xl font-extrabold mb-4">Welcome to the Tasks Management App</h2>
   <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">Feel free to try the application by clicking on the continue button.</p>
-  <a routerLink="login" class="bg-maroon-primary hover:bg-maroon-light text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+  <a [routerLink]="['auth', 'login']" class="bg-maroon-primary hover:bg-maroon-light text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
     Continue →
   </a>
 </main>

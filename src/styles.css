@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
 @theme {
-  --color-cf-red-100: #5A0F1E;
-  --color-cf-red-200: #550e1e;
-  --color-cf-dark-gray: #202123;
-  --color-cf-gray: #2b2d2f;
+  --color-maroon-primary: #5c0a1b;
+  --color-maroon-light: #7a0e25;
+  --color-maroon-dark: #2d0a10;
 }
+@custom-variant dark (&:where(.dark, .dark *));

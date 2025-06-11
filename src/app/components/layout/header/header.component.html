@@ -1,0 +1,12 @@
+<header class="flex items-center justify-between w-full bg-maroon-primary dark:bg-maroon-dark h-20 p-4 shadow-md text-white">
+  <div class="flex items-center justify-start gap-x-4 w-full">
+    <a routerLink="">
+      <img class="size-10 rounded-full border-2 border-white" src="tasks-app-logo.png" alt="Application Logo">
+    </a>
+    <span class="text-2xl font-semibold">My Tasks Management App</span>
+  </div>
+  <!-- Toggle Button -->
+  <button (click)="toggleDarkMode()" class="text-white dark:text-yellow-400 text-xl p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+    <i [class]="isDarkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
+  </button>
+</header>

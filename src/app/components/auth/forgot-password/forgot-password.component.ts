@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
   host: {
@@ -11,5 +12,11 @@ import { RouterLink } from '@angular/router';
   }
 })
 export class ForgotPasswordComponent {
+  enteredUsername:string = '';
 
+  //TODO: handle submit forgot password form
+  onSubmitForm() {
+    if (!this.enteredUsername) return;
+    this.enteredUsername = this.enteredUsername.trim();
+  }
 }

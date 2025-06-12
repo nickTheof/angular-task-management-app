@@ -1,5 +1,6 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,6 +9,9 @@ import {RouterLink} from '@angular/router';
   styleUrl: 'header.component.css'
 })
 export class HeaderComponent implements OnInit {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  currentUser = this.authService.user;
   isDarkMode: boolean = false;
 
   toggleDarkMode(): void {
@@ -23,4 +27,10 @@ export class HeaderComponent implements OnInit {
       this.isDarkMode = true;
     }
   }
+
+  logout() {
+    this.authService.clearCredentials();
+    this.router.navigate([''], { replaceUrl: true });
+  }
+
 }

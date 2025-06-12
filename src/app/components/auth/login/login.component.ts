@@ -19,6 +19,7 @@ import {UiCardResponsesService} from '../../../shared/services/ui-card-responses
   }
 })
 export class LoginComponent implements OnDestroy {
+  // Inject required services
     private authService = inject(AuthService);
     private router = inject(Router);
     private uiService = inject(UiCardResponsesService);
@@ -35,9 +36,12 @@ export class LoginComponent implements OnDestroy {
       password: new FormControl<string>('', Validators.required),
     })
 
-  // Clear card response if we navigate to another component and we didnt close by own the card message
+  // Clear card response if the user navigates away without manually dismissing it
     ngOnDestroy() {
       this.uiService.clearError();
+      // After a successful registration, display a success message and keep it visible.
+      // If the user navigates away without manually dismissing it, it will be cleared in ngOnDestroy.
+      this.uiService.clearSuccess();
     }
 
     // Procedure executed when login form submitted

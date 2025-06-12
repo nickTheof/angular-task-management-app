@@ -17,7 +17,14 @@ export type RegisterUserResponse = {
   role: "ADMIN" | "USER";
 }
 
-export type ForgotPasswordResponse = {
+export interface ForgotPasswordResponse {
   Status: number;
   message: string;
 }
+
+export type ResetPasswordDTO = {
+  token: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordResponse extends  ForgotPasswordResponse {}

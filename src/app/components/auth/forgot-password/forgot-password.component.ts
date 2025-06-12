@@ -32,15 +32,21 @@ export class ForgotPasswordComponent implements OnDestroy {
       username: this.enteredUsername.trim(),
     }
     this.uiService.activateLoading();
-    this.passwordRecoveryService.sendPasswordResetRequest(dto).subscribe({
+    this.passwordRecoveryService.sendForgetPasswordRequest(dto).subscribe({
       next: result => {
         this.uiService.setSuccess(result.message);
+        this.clearUsername();
         this.uiService.deactivateLoading();
       },
       error: (err: HttpErrorResponse) => {
         this.uiService.setError(err.error.message);
+        this.clearUsername();
         this.uiService.deactivateLoading();
       }
     })
+  }
+
+  private clearUsername() {
+    this.enteredUsername = '';
   }
 }

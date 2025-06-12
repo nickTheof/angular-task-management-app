@@ -17,6 +17,8 @@ export type RegisterUserResponse = {
   role: "ADMIN" | "USER";
 }
 
+export type UserReadOnlyDTO = RegisterUserResponse;
+
 export interface ForgotPasswordResponse {
   Status: number;
   message: string;

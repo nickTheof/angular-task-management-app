@@ -65,7 +65,7 @@ export class AuthService {
     return this.user()?.role === "ADMIN";
   }
 
-  private isTokenExpired(token: string | null): boolean {
+  isTokenExpired(token: string | null): boolean {
     if (token) {
       const decoded = jwtDecode<DecodedToken>(token);
       return decoded.exp * 1000 < Date.now();

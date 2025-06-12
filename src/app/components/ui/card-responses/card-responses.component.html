@@ -1,0 +1,9 @@
+@if (isLoading()) {
+  <app-loading-spinner />
+}
+@if (error()) {
+  <app-error-card [error]="error()" (close)="clearCard()" />
+}
+@if (success()) {
+  <app-success-card [message]="success()" (close)="clearCard()" />
+}

@@ -9,6 +9,10 @@ export function getError(
     if (control.errors?.['required']) return 'Αυτό το πεδίο είναι υποχρεωτικό';
     if (control.errors?.['pattern']) return 'Μη έγκυρη μορφή';
     if (control.errors?.['email']) return 'Μη έγκυρη μορφή email';
+    if (control.hasError('minlength')) {
+      const minlengthError = control.getError('minlength') as { requiredLength: number, actualLength: number };
+      return `Το πεδίο πρέπει να περιλαμβάνει τουλάχιστον ${minlengthError.requiredLength} χαρακτήρες`;
+    }
   }
   // Handle group-level (cross-field) validation errors
   if (

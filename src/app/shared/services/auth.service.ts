@@ -5,9 +5,8 @@ import {jwtDecode} from 'jwt-decode';
 import {DecodedToken, LoggedInUser, LoginResponse} from '../interfaces/auth.interfaces';
 import {LoginUserDTO} from '../interfaces/user.interfaces';
 import {tap} from 'rxjs';
+import {environment} from '../../../environments/environment.development';
 
-
-const API_AUTH_BASE_URL = 'http://localhost:8080/api/v1/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +39,7 @@ export class AuthService {
 
   login(dto: LoginUserDTO) {
     return this.http.post<LoginResponse>(
-      `${API_AUTH_BASE_URL}/login`,
+      `${environment.BASE_URL}/auth/login`,
           dto
     ).pipe(
       tap(res => {

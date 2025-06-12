@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnDestroy, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -6,54 +6,61 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {LoginUserDTO} from '../../../shared/interfaces/user.interfaces';
 import {ErrorCardComponent} from '../../ui/error-card/error-card.component';
 import {LoadingSpinnerComponent} from '../../ui/loading-spinner/loading-spinner.component';
+import {CardResponsesComponent} from '../../ui/card-responses/card-responses.component';
+import {UiCardResponsesService} from '../../../shared/services/ui-card-responses.service';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule, ErrorCardComponent, LoadingSpinnerComponent],
+  imports: [RouterLink, ReactiveFormsModule, ErrorCardComponent, LoadingSpinnerComponent, CardResponsesComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   host: {
     class: 'flex-grow bg-gray-100 dark:bg-gray-900 transition-colors duration-300 p-24'
   }
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
     private authService = inject(AuthService);
     private router = inject(Router);
+    private uiService = inject(UiCardResponsesService);
 
-    isLoading = signal<boolean>(false);
-    error = signal<string | null>(null);
+    // Show - Hide password field
     showPassword = false;
-
-    togglePasswordVisibility = () => {
+    togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     }
 
+    // The form group Object
     form = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
+      username: new FormControl<string>('', [Validators.required, Validators.email]),
+      password: new FormControl<string>('', Validators.required),
     })
 
+  // Clear card response if we navigate to another component and we didnt close by own the card message
+    ngOnDestroy() {
+      this.uiService.clearError();
+    }
 
-    onLogin() {
+    // Procedure executed when login form submitted
+  onSubmitLogin() {
       if (!this.form.valid) {
         return;
       }
-      this.isLoading.set(true);
+      this.uiService.activateLoading()
       this.authService.login(this.getLoginCredentials())
         .subscribe({
           next: (resp) => {
-            this.isLoading.set(false);
+            this.uiService.deactivateLoading();
             this.router.navigate(['../','dashboard']);
           },
           error: (err: HttpErrorResponse)  => {
-            this.isLoading.set(false);
-            this.error.set(err.error.message);
-            this.form.reset();
-            console.log(err);
+            this.uiService.deactivateLoading();
+            this.uiService.setError(err.error.message);
+            this.form.get("password")?.reset();
           }
         })
     }
 
+    // Helper Method for creating DTO from form values
     private getLoginCredentials(): LoginUserDTO {
       return {
         username: this.form.value.username?.trim() || '',

@@ -8,3 +8,11 @@ export interface LoginUserDTO extends UserForgotPasswordDTO {
 
 export interface RegisterUserDTO extends LoginUserDTO {
 }
+
+export type RegisterUserResponse = {
+  id: number;
+  uuid: string;
+  username: string;
+  isActive: boolean;
+  role: "ADMIN" | "USER";
+}

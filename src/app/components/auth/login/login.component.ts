@@ -52,7 +52,7 @@ export class LoginComponent implements OnDestroy {
         .subscribe({
           next: (resp) => {
             this.uiService.deactivateLoading();
-            this.router.navigate(['../','dashboard']);
+            this.router.navigate(['../','dashboard', 'tasks']);
           },
           error: (err: HttpErrorResponse)  => {
             this.uiService.deactivateLoading();

@@ -16,3 +16,8 @@ export type RegisterUserResponse = {
   isActive: boolean;
   role: "ADMIN" | "USER";
 }
+
+export type ForgotPasswordResponse = {
+  Status: number;
+  message: string;
+}

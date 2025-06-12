@@ -1,22 +1,46 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnDestroy} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import {UiCardResponsesService} from '../../../shared/services/ui-card-responses.service';
+import {PasswordRecoveryService} from '../../../shared/services/password-recovery.service';
+import {UserForgotPasswordDTO} from '../../../shared/interfaces/user.interfaces';
+import { HttpErrorResponse } from '@angular/common/http';
+import {CardResponsesComponent} from '../../ui/card-responses/card-responses.component';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, CardResponsesComponent],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.css',
   host: {
-    class: 'flex-grow bg-gray-100 dark:bg-gray-900 transition-colors duration-300 p-4',
+    class: 'flex-grow bg-gray-100 dark:bg-gray-900 transition-colors duration-300 p-24',
   }
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnDestroy {
+  private uiService = inject(UiCardResponsesService);
+  private passwordRecoveryService = inject(PasswordRecoveryService);
   enteredUsername:string = '';
 
-  //TODO: handle submit forgot password form
+  ngOnDestroy() {
+    this.uiService.clearError();
+    this.uiService.clearSuccess();
+  }
+
   onSubmitForm() {
     if (!this.enteredUsername) return;
-    this.enteredUsername = this.enteredUsername.trim();
+    const dto: UserForgotPasswordDTO = {
+      username: this.enteredUsername.trim(),
+    }
+    this.uiService.activateLoading();
+    this.passwordRecoveryService.sendPasswordResetRequest(dto).subscribe({
+      next: result => {
+        this.uiService.setSuccess(result.message);
+        this.uiService.deactivateLoading();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.uiService.setError(err.error.message);
+        this.uiService.deactivateLoading();
+      }
+    })
   }
 }

@@ -4,14 +4,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpErrorResponse } from '@angular/common/http';
 import {AuthService} from '../../../shared/services/auth.service';
 import {LoginUserDTO} from '../../../shared/interfaces/user.interfaces';
-import {ErrorCardComponent} from '../../ui/error-card/error-card.component';
-import {LoadingSpinnerComponent} from '../../ui/loading-spinner/loading-spinner.component';
 import {CardResponsesComponent} from '../../ui/card-responses/card-responses.component';
 import {UiCardResponsesService} from '../../../shared/services/ui-card-responses.service';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, ReactiveFormsModule, ErrorCardComponent, LoadingSpinnerComponent, CardResponsesComponent],
+  imports: [RouterLink, ReactiveFormsModule, CardResponsesComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   host: {

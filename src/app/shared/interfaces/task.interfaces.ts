@@ -7,10 +7,18 @@ export type TaskStatus =
   |'FAILED'
   |'CANCELLED'
 
+export interface TaskBadgeStyle {
+  style: string;
+  icon: string;
+}
+
 export interface TaskInsertDTO {
   title: string;
   description: string;
   status: TaskStatus;
+}
+
+export interface TaskUpdateDTO extends TaskInsertDTO {
 }
 
 export interface TaskReadOnlyDTO {

@@ -1,0 +1,7 @@
+<span
+  class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full bg-transparent backdrop-blur-sm uppercase tracking-wide transition-colors duration-200"
+  [classList]="getBadgeStyle().style"
+>
+  <i [classList]="getBadgeStyle().icon" class="text-sm opacity-80"></i>
+  {{ status() | titlecase }}
+</span>

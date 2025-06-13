@@ -27,6 +27,15 @@ export class TaskService {
     )
   }
 
+  getFilteredTasks(filterObj: PaginationQuery) {
+    return this.http.post<PaginatedFilteredTasks>(`${environment.BASE_URL}/tasks/filtered`, filterObj)
+      .pipe(
+        tap(tasks => {
+          this._tasks.set(tasks.data)
+        })
+      )
+  }
+
   insertMyTask(dto: TaskInsertDTO): Observable<TaskReadOnlyDTO> {
     return this.http.post<TaskReadOnlyDTO>(`${environment.BASE_URL}/users/me/tasks`, dto);
   }
@@ -37,5 +46,9 @@ export class TaskService {
 
   deleteMyTask(taskUuid: string): Observable<void> {
     return this.http.delete<void>(`${environment.BASE_URL}/users/me/tasks/${taskUuid}`);
+  }
+
+  deleteTask(task: TaskReadOnlyDTO): Observable<void> {
+    return this.http.delete<void>(`${environment.BASE_URL}/tasks/${task.uuid}`);
   }
 }

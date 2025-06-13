@@ -56,6 +56,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.uiService.clearError();
     this.uiService.clearSuccess();
     this.paginationService.reset();
+    this.taskService.clearTasks();
   }
 
   /**

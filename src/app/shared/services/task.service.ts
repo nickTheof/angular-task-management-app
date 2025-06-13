@@ -51,4 +51,8 @@ export class TaskService {
   deleteTask(task: TaskReadOnlyDTO): Observable<void> {
     return this.http.delete<void>(`${environment.BASE_URL}/tasks/${task.uuid}`);
   }
+
+  clearTasks() {
+    this._tasks.set([])
+  }
 }

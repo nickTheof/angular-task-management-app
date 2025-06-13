@@ -45,6 +45,7 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Lifecycle hook: initializes task loading on component mount
    */
   ngOnInit(): void {
+    this.paginationService.setSize(9)
     this.loadData();
   }
 

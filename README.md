@@ -1,5 +1,5 @@
 
-# my Tasks Management App
+# My Tasks Management App
 
 This project is a modern Angular application for task management featuring role-based access (ADMIN / USER), responsive UI, light/dark theme support, and robust data filtering and pagination.
 

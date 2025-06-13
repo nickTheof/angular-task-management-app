@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, signal} from '@angular/core';
+import {Component, inject, input, OnInit, output, signal} from '@angular/core';
 import {TaskReadOnlyDTO, TaskStatus, TaskUpdateDTO} from '../../../shared/interfaces/task.interfaces';
 import {TitleCasePipe} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -24,8 +24,12 @@ export class TaskCardComponent implements OnInit {
   private taskService = inject(TaskService);
   private uiService = inject(UiCardResponsesService);
 
+
   // Component requires an input TaskReadOnlyDTO provided from the parent component
   task = input.required<TaskReadOnlyDTO>();
+
+  // Emit a successful delete or update for force refetching data
+  actionPerformed = output();
 
   // state useful for changing between display and edit mode
   isEdit = signal<boolean>(false);
@@ -57,6 +61,9 @@ export class TaskCardComponent implements OnInit {
   // Procedure executed when the delete button is clicked
   onDelete = () => {
     this.taskService.deleteMyTask(this.task().uuid).subscribe({
+      next: () => {
+        this.actionPerformed.emit();
+      },
       error: (err: HttpErrorResponse) => {
         this.uiService.setError(err.error.message);
       }
@@ -68,7 +75,8 @@ export class TaskCardComponent implements OnInit {
     if (this.form.invalid) return;
     this.taskService.updateMyTask(this.task().uuid, this.getTaskUpdateDTO()).subscribe({
       next: () => {
-        this.toggleEdit();
+        this.isEdit.update((val) => !val);
+        this.actionPerformed.emit();
       },
       error: (err: HttpErrorResponse) => {
         this.uiService.setError(err.error.message);

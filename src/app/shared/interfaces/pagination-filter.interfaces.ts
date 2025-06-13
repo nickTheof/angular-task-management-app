@@ -7,7 +7,7 @@ export type TaskSortLabels = |'Created At' | 'Updated At' | 'Title' | 'Status'
 
 export type UserSortLabels = 'Created At' | 'Updated At' | 'Username' | 'Role' | 'Active'
 
-export type TaskSortFields = |'createdAt' | 'updatedAt' | 'title' | 'status'
+export type TaskSortFields = |'createdAt' | 'updatedAt' | 'title' | 'status' | 'uuid'
 
 export type UserSortFields = |'createdAt' | 'updatedAt' | 'username' | 'role' | 'isActive' | 'uuid'
 

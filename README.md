@@ -1,7 +1,7 @@
 
-# myTasksManagementApp
+# my Tasks Management App
 
-A modern Angular application for task management featuring role-based access (ADMIN / USER), responsive UI, light/dark theme support, and robust data filtering and pagination.
+This project is a modern Angular application for task management featuring role-based access (ADMIN / USER), responsive UI, light/dark theme support, and robust data filtering and pagination.
 
 > ⚙️ This project serves as the **frontend** for the [tasks-management REST API](https://github.com/nickTheof/spring-rest-tasks-app.git), a Spring Boot Java backend that handles authentication, task/user management, and data persistence.
 
@@ -77,7 +77,7 @@ Make sure your Spring Boot backend is running locally or hosted to provide API a
 - **User Registration**  
   ![User Registration](screenshots/user-register.png)
 - ** Forgot Password**
-[User Forgot Password](screenshots/user-forgot-password.png)
+  ![User Forgot Password](screenshots/user-forgot-password.png)
 
 ### 🎯 Dashboards
 - **Landing Page**  

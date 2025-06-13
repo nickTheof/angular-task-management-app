@@ -10,6 +10,8 @@ import {AdminPanelComponent} from './components/dashboard/admin-panel/admin-pane
 import {adminGuard, adminGuardChild} from './shared/guards/admin.guard';
 import {NewTaskComponent} from './components/tasks/new-task/new-task.component';
 import {TasksComponent} from './components/tasks/tasks/tasks.component';
+import {AdminTasksComponent} from './components/dashboard/admin-panel/admin-tasks/admin-tasks.component';
+import {AdminUsersComponent} from './components/dashboard/admin-panel/admin-users/admin-users.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +60,16 @@ export const routes: Routes = [
     path: 'admin-panel',
     component: AdminPanelComponent,
     canActivate: [authGuard, adminGuard],
-    canActivateChild: [authGuardChild, adminGuardChild]
+    canActivateChild: [authGuardChild, adminGuardChild],
+    children: [
+      {
+        path: 'tasks',
+        component: AdminTasksComponent
+      },
+      {
+        path: 'users',
+        component: AdminUsersComponent
+      }
+    ]
   }
 ];

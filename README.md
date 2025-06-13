@@ -1,59 +1,89 @@
-# MyTasksFrontendApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.
+# myTasksManagementApp
 
-## Development server
+A modern Angular application for task management featuring role-based access (ADMIN / USER), responsive UI, light/dark theme support, and robust data filtering and pagination.
 
-To start a local development server, run:
+> ⚙️ This project serves as the **frontend** for the [tasks-management REST API](https://github.com/nickTheof/spring-rest-tasks-app.git), a Spring Boot Java backend that handles authentication, task/user management, and data persistence.
+
+> 🔗 Make sure the API is running to fully utilize the features of `myTasksManagementApp`.
+
+---
+
+## 🌟 Features
+
+- 🔐 **Authentication & Authorization**
+  - Login and "Forgot Password" via email
+  - Role-based UI and logic (ADMIN / USER)
+  - JWT authentication. Store token in localstorage. 
+
+- 🎨 **Dark/Light Mode**
+  - Toggle using Tailwind's dark mode with a class-based approach on `<html>`. Store user preference in localstorage.
+
+- 👤 **Admin Panel**
+  - Full access to user and task management
+  - Sortable, paginated tables
+  - Update user roles
+  - Toggle user active status
+  - Delete users or tasks
+
+- 🧑‍💼 **User Mode**
+  - View own tasks as card-based UI
+  - Filter, sort, paginate tasks
+
+- 📦 **Reusable Pagination & Filter Service**
+  - Generic service handling sorting, filters, pagination for both users and tasks
+
+- 🧩 **Responsive Design**
+  - Mobile-friendly tables and layout using Tailwind CSS
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js + Angular CLI
+- Backend: [Spring Boot tasks-management REST API](https://github.com/nickTheof/spring-rest-tasks-app.git)
+
+### Setup
 
 ```bash
+git clone https://github.com/nickTheof/angular-task-management-app.git
+cd angular-task-management-app
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Make sure your Spring Boot backend is running locally or hosted to provide API access.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🛠️ Tech Stack
 
-```bash
-ng generate component component-name
-```
+- Angular
+- Tailwind CSS
+- RxJS Signals
+- Font Awesome (icons)
+- Spring Boot (backend)
+- REST API Integration
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🖼️ Screenshots
 
-## Building
+### 🔐 Authentication
+- **Login Page**  
+  ![Login Page](screenshots/login-page.png)
+- **User Registration**  
+  ![User Registration](screenshots/user-register.png)
+- ** Forgot Password**
+[User Forgot Password](screenshots/user-forgot-password.png)
 
-To build the project run:
+### 🎯 Dashboards
+- **Landing Page**  
+  ![Landing Page](screenshots/landing-page.png)
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📄 License
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is licensed under the MIT License - see the [LICENSE](licence.txt) file for details.

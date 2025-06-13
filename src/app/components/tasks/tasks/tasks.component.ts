@@ -85,8 +85,6 @@ export class TasksComponent implements OnInit, OnDestroy {
       : [...currentStatuses, status];
 
     this.paginationService.updateFilters({ taskStatus: updated });
-    console.log(this.paginationService.areFiltersEmpty())
-    console.log(this.paginationService.filters())
     this.loadData();
   }
 

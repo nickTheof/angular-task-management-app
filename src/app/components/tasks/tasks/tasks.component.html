@@ -1,6 +1,6 @@
 <app-card-responses />
+<!-- Filtering Controls -->
 <div class="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow flex flex-col md:flex-row items-start md:items-center justify-between gap-4 m-4">
-
   <!-- 🔘 Status Filter Badges -->
   <div class="flex flex-wrap gap-2">
     @for (opt of statusOptions; track opt) {
@@ -11,7 +11,7 @@
         {{opt | titlecase}}
       </button>
     }
-    @if (selectedStatuses().length > 0) {
+    @if (!areFiltersEmpty()) {
       <button
         (click)="clearFilters()"
         class="ml-2 text-sm font-semibold text-red-500 hover:text-red-600 transition"
@@ -20,33 +20,43 @@
       </button>
     }
   </div>
-
-  <!-- 🔃 Sort Controls -->
   <div class="flex items-center gap-3 flex-wrap">
-    <!-- 🔽 Sort Field -->
-    <label for="sortField" class="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</label>
-    <select
-      id="sortField"
-      [(ngModel)]="sortBy"
-      (change)="onSortChange()"
-      class="px-2 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-maroon-primary"
-    >
-      @for (field of sortFields; track field.value) {
-        <option [value]="field.value"> {{field.label}}</option>
-      }
-    </select>
+  <!-- 🔃 Sort Controls -->
+  <select
+    id="sortField"
+    [ngModel]="paginationService.sortBy()"
+    (ngModelChange)="onSortChange($event)"
+    class="px-2 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-maroon-primary"
+  >
+    @for (field of sortFields; track field.value) {
+      <option [value]="field.value">{{ field.label }}</option>
+    }
+  </select>
 
     <!-- 🔁 Sort Direction -->
     <button
       class="flex items-center gap-1 text-sm px-2 py-1 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
       (click)="toggleSortDir()"
     >
-      <i [classList]="sortDir === 'ASC' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
-      {{ sortDir === 'ASC' ? 'ASC' : 'DESC' }}
+      <i [classList]="this.paginationService.sortDir() === 'ASC' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+      {{ this.paginationService.sortDir() === 'ASC' ? 'ASC' : 'DESC' }}
     </button>
-  </div>
 
+    <!-- 🔢 Page Size -->
+    <label for="pageSize" class="text-sm font-medium text-gray-700 dark:text-gray-300">Items per page:</label>
+    <select
+      id="pageSize"
+      [ngModel]="paginationService.size()"
+      (ngModelChange)="onPageSizeChange($event)"
+      class="px-2 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-maroon-primary"
+    >
+      @for (size of [3, 6, 9, 12, 24]; track size) {
+        <option [value]="size">{{ size }}</option>
+      }
+    </select>
+  </div>
 </div>
+<!-- Task Card Components -->
 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 sm:p-6">
   @for (task of tasks(); track task.uuid) {
     <app-task-card
@@ -55,9 +65,11 @@
     ></app-task-card>
   }
 </section>
+
+<!-- Pagination Controls -->
 <div class="flex justify-center items-center gap-2 mt-6 text-sm">
   <button
-    [disabled]="page === 0"
+    [disabled]="this.paginationService.page() === 0"
     (click)="prevPage()"
     class="px-3 py-1 rounded-lg border bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-40"
   >
@@ -65,11 +77,11 @@
   </button>
 
   <span class="text-gray-600 dark:text-gray-300">
-    Page {{ page + 1 }} of {{ totalPages }}
+    Page {{ this.paginationService.page() + 1 }} of {{ totalPages === 0 ? 1 : totalPages }}
   </span>
 
   <button
-    [disabled]="page + 1 >= totalPages"
+    [disabled]="this.paginationService.page() + 1 >= totalPages"
     (click)="nextPage()"
     class="px-3 py-1 rounded-lg border bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-40"
   >

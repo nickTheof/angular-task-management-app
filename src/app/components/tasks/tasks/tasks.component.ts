@@ -1,14 +1,16 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {Component, computed, inject, OnDestroy, OnInit} from '@angular/core';
 import { CardResponsesComponent } from '../../ui/card-responses/card-responses.component';
 import { UiCardResponsesService } from '../../../shared/services/ui-card-responses.service';
 import { TaskCardComponent } from '../task-card/task-card.component';
-import { TaskFiltersDTO, TaskSortFieldLabels, TaskStatus } from '../../../shared/interfaces/task.interfaces';
+import { TaskStatus } from '../../../shared/interfaces/task.interfaces';
 import { statuses } from '../../../shared/utils/task-status';
 import { TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../shared/services/task.service';
-import { TaskSortFields, OrderByFields } from '../../../shared/interfaces/task.interfaces';
 import { HttpErrorResponse } from '@angular/common/http';
+import {PaginationFilterService} from '../../../shared/services/pagination-filter.service';
+import {TaskFilters, TaskSortFields} from '../../../shared/interfaces/pagination-filter.interfaces';
+import {TASK_SORT_FIELDS} from '../../../shared/interfaces/pagination-filter.interfaces';
 
 @Component({
   selector: 'app-tasks',
@@ -21,27 +23,20 @@ export class TasksComponent implements OnInit, OnDestroy {
   // Injected services
   private uiService = inject(UiCardResponsesService);
   private taskService = inject(TaskService);
+  paginationService = inject(PaginationFilterService);
 
-  // Observable signal for the fetched tasks
+
+  // Observable readable signal for the fetched tasks
   tasks = this.taskService.tasks;
 
-  // Signal to track selected status filters
-  selectedStatuses = signal<TaskStatus[]>([]);
+  // Computed signal for checking the taskStatus filters
+  areFiltersEmpty = computed(() => {
+    const filters = this.paginationService.filters() as TaskFilters;
+    return !filters.taskStatus || filters.taskStatus.length === 0;
+  });
 
-  // Pagination controls
-  page = 0;
-  size = 6;
+  sortFields = TASK_SORT_FIELDS;
   totalPages = 0;
-
-  // Sorting controls
-  sortBy: TaskSortFields = 'createdAt';
-  sortDir: OrderByFields = 'ASC';
-  sortFields: TaskSortFieldLabels[] = [
-    { value: 'createdAt', label: 'Created At' },
-    { value: 'updatedAt', label: 'Updated At' },
-    { value: 'title', label: 'Title' },
-    { value: 'status', label: 'Status' },
-  ];
 
   // Available task status filter options
   statusOptions = statuses;
@@ -59,13 +54,14 @@ export class TasksComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.uiService.clearError();
     this.uiService.clearSuccess();
+    this.paginationService.reset();
   }
 
   /**
    * Navigates to the previous page and reloads tasks
    */
   prevPage() {
-    this.page--;
+    this.paginationService.prevPage();
     this.loadData();
   }
 
@@ -73,7 +69,7 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Navigates to the next page and reloads tasks
    */
   nextPage() {
-    this.page++;
+    this.paginationService.nextPage();
     this.loadData();
   }
 
@@ -82,12 +78,15 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Triggers data reload
    */
   toggleStatusFilter(status: TaskStatus) {
-    if (this.isStatusSelected(status)) {
-      this.selectedStatuses.update(prev => prev.filter(s => s !== status));
-    } else {
-      this.selectedStatuses.update(prev => [...prev, status]);
-    }
-    this.resetPagination();
+    const taskFilters = this.paginationService.filters() as TaskFilters;
+    const currentStatuses = taskFilters.taskStatus || [];
+    const updated = currentStatuses.includes(status)
+      ? currentStatuses.filter(s => s !== status)
+      : [...currentStatuses, status];
+
+    this.paginationService.updateFilters({ taskStatus: updated });
+    console.log(this.paginationService.areFiltersEmpty())
+    console.log(this.paginationService.filters())
     this.loadData();
   }
 
@@ -95,32 +94,41 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Checks whether a status is currently selected
    */
   isStatusSelected(status: TaskStatus) {
-    return this.selectedStatuses().includes(status);
+    const taskFilters = this.paginationService.filters() as TaskFilters;
+    return taskFilters.taskStatus?.includes(status) ?? false;
   }
 
   /**
    * Clears all active filters and reloads tasks
    */
   clearFilters() {
-    this.selectedStatuses.set([]);
-    this.resetPagination();
+    this.paginationService.clearFilters();
     this.loadData();
   }
 
   /**
    * Called when the sort field is changed
    */
-  onSortChange() {
-    this.resetPagination();
+  onSortChange(field: TaskSortFields) {
+    this.paginationService.setSort(field, this.paginationService.sortDir());
     this.loadData();
   }
 
   /**
-   * Toggles sorting direction (ASC <-> DESC)
+   * Called when the page size is changed
+   */
+  onPageSizeChange(size: number){
+    this.paginationService.setSize(size);
+    this.paginationService.setPage(0);
+    this.loadData();
+  }
+
+  /**
+   * Called when the sort Direction is changed
    */
   toggleSortDir() {
-    this.sortDir = this.sortDir === 'ASC' ? 'DESC' : 'ASC';
-    this.resetPagination();
+    const dir = this.paginationService.sortDir() === 'ASC' ? 'DESC' : 'ASC';
+    this.paginationService.setSort(this.paginationService.sortBy(), dir)
     this.loadData();
   }
 
@@ -128,10 +136,9 @@ export class TasksComponent implements OnInit, OnDestroy {
    * Fetches paginated and filtered tasks from the service
    */
   loadData() {
-    this.taskService.getUserPaginatedFilteredTasks(this.getTaskFilters()).subscribe({
+    this.taskService.getUserPaginatedFilteredTasks(this.paginationService.getQuery()).subscribe({
       next: (response) => {
         this.totalPages = response.totalPages;
-        this.page = response.currentPage;
       },
       error: (err: HttpErrorResponse) => {
         this.uiService.setError(err.error.message);
@@ -139,23 +146,4 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Constructs the TaskFiltersDTO object used for filtering + pagination
-   */
-  private getTaskFilters(): TaskFiltersDTO {
-    return {
-      page: this.page,
-      size: this.size,
-      sortBy: this.sortBy,
-      orderBy: this.sortDir,
-      taskStatus: this.selectedStatuses()
-    }
-  }
-
-  /**
-   * Resets pagination to the first page (used on filter/sort changes)
-   */
-  private resetPagination() {
-    this.page = 0;
-  }
 }

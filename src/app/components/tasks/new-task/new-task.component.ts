@@ -1,14 +1,15 @@
 import {Component, inject, OnDestroy} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {CardResponsesComponent} from '../../ui/card-responses/card-responses.component';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {TitleCasePipe} from '@angular/common';
+import {HttpErrorResponse} from '@angular/common/http';
+import {CardResponsesComponent} from '../../ui/card-responses/card-responses.component';
 import type {TaskInsertDTO, TaskStatus} from '../../../shared/interfaces/task.interfaces';
 import {getError} from '../../../shared/utils/field.validator';
 import {TaskService} from '../../../shared/services/task.service';
 import {UiCardResponsesService} from '../../../shared/services/ui-card-responses.service';
-import {HttpErrorResponse} from '@angular/common/http';
+import {statuses} from '../../../shared/utils/task-status';
 
-const allStatuses: TaskStatus[] = ['OPEN', 'ONGOING', 'COMPLETED', 'FAILED', 'CANCELLED'];
 
 @Component({
   selector: 'app-new-task',
@@ -16,6 +17,7 @@ const allStatuses: TaskStatus[] = ['OPEN', 'ONGOING', 'COMPLETED', 'FAILED', 'CA
     RouterLink,
     CardResponsesComponent,
     ReactiveFormsModule,
+    TitleCasePipe,
   ],
   templateUrl: './new-task.component.html',
   styleUrl: './new-task.component.css',
@@ -24,27 +26,28 @@ const allStatuses: TaskStatus[] = ['OPEN', 'ONGOING', 'COMPLETED', 'FAILED', 'CA
   }
 })
 export class NewTaskComponent implements OnDestroy {
+  // Inject required services
   private taskService = inject(TaskService);
   private uiService = inject(UiCardResponsesService);
   private router = inject(Router);
 
-  statusOptions = allStatuses.map(status => ({
-    value: status,
-    label: status.charAt(0) + status.slice(1).toLowerCase()
-  }));
-
+  // Util data and functions
+  statusOptions = statuses;
   getErrors = getError;
 
+  // Instantiate an Angular Reactive Form
   form = new FormGroup({
     title: new FormControl<string>('', [Validators.required, Validators.minLength(2)]),
     description: new FormControl<string>('', [Validators.required, Validators.minLength(5)]),
     status: new FormControl<TaskStatus>('OPEN', [Validators.required]),
   })
 
+  // Cleaning error card responses on destroy
   ngOnDestroy() {
     this.uiService.clearError();
   }
 
+  // Procedure executed when the new task form submitted
   onSubmitForm() {
     if (this.form.invalid) return;
     const dto: TaskInsertDTO = this.getTaskInsertDTO();
@@ -64,7 +67,8 @@ export class NewTaskComponent implements OnDestroy {
     )
   }
 
-  getTaskInsertDTO(): TaskInsertDTO {
+  // Helper Method for creating DTO from form values
+  private getTaskInsertDTO(): TaskInsertDTO {
     return {
       title: this.form.get('title')?.value || '',
       description: this.form.get('description')?.value || '',

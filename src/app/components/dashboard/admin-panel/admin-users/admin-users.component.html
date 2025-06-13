@@ -1,0 +1,91 @@
+<div class="py-2">
+  <a class="inline-block bg-maroon-primary hover:bg-maroon-light text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 transform hover:scale-105"
+     [routerLink]="['../', 'tasks']"
+  >Tasks Panel</a>
+</div>
+<div class="overflow-x-auto rounded-xl shadow bg-white dark:bg-gray-800 p-4">
+  <table class="table-auto w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
+    <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+    <tr>
+      <th class="px-4 py-2 text-left font-semibold cursor-pointer" (click)="sortBy('uuid')">
+        UUID
+        <i [class]="sortByField === 'uuid' ? sortDirIcon() : 'fas fa-sort text-xs ml-1 opacity-50'"></i>
+      </th>
+      <th class="px-4 py-2 text-left font-semibold cursor-pointer" (click)="sortBy('username')">
+        Username
+        <i [class]="sortByField === 'username' ? sortDirIcon() : 'fas fa-sort text-xs ml-1 opacity-50'"></i>
+      </th>
+      <th class="px-4 py-2 text-left font-semibold cursor-pointer" (click)="sortBy('role')">
+        Role
+        <i [class]="sortByField === 'role' ? sortDirIcon() : 'fas fa-sort text-xs ml-1 opacity-50'"></i>
+      </th>
+      <th class="px-4 py-2 text-left font-semibold cursor-pointer" (click)="sortBy('isActive')">
+        Status
+        <i [class]="sortByField === 'isActive' ? sortDirIcon() : 'fas fa-sort text-xs ml-1 opacity-50'"></i>
+      </th>
+      <th class="px-4 py-2 text-center font-semibold">Actions</th>
+    </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-gray-900 dark:text-gray-100">
+      @for (user of users(); track user.uuid) {
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+          <td class="px-4 py-2 font-medium truncate">{{ user.uuid }}</td>
+          <td class="px-4 py-2 font-medium">{{ user.username }}</td>
+          <!-- 🔽 Role Dropdown -->
+          <td class="px-4 py-2">
+            <select
+              [ngModel]="user.role"
+              (ngModelChange)="updateUserRole(user, $event)"
+              class="text-sm px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none"
+            >
+              <option [selected]="user.role==='ADMIN'" value="ADMIN">ADMIN</option>
+              <option [selected]="user.role==='USER'" value="USER">USER</option>
+            </select>
+          </td>
+          <!-- ✅ Toggle Active Status -->
+          <td class="px-4 py-2">
+            <button
+              (click)="toggleActive(user)"
+              [classList]="user.isActive
+      ? 'text-green-700 dark:text-green-300'
+      : 'text-red-700 dark:text-red-300'"
+              class="px-2 py-1 rounded text-xs font-semibold transition duration-200 cursor-pointer"
+            >
+              <i [classList]="user.isActive ? 'fa-solid fa-toggle-on' : 'fa-solid fa-toggle-off'" class="mr-1"></i>
+              {{ user.isActive ? 'Active' : 'Inactive' }}
+            </button>
+          </td>
+          <td class="px-4 py-2 text-center">
+            <button (click)="deleteUser(user)" class="text-red-500 hover:text-red-600 transition cursor-pointer"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-end items-center mt-4 text-sm">
+    <div class="flex items-center gap-2">
+      <button
+        (click)="prevPage()"
+        [disabled]="paginationService.page() === 0"
+        class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border hover:bg-maroon-50 dark:hover:bg-maroon-800 transition disabled:opacity-40"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <span class="text-gray-700 dark:text-gray-200">
+        Page {{ paginationService.page() + 1 }} of {{ totalPages }}
+      </span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="paginationService.page() + 1 >= totalPages"
+        class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border hover:bg-maroon-50 dark:hover:bg-maroon-800 transition disabled:opacity-40"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+

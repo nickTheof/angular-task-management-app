@@ -72,16 +72,29 @@ Make sure your Spring Boot backend is running locally or hosted to provide API a
 ## 🖼️ Screenshots
 
 ### 🔐 Authentication
-- **Login Page**  
   ![Login Page](screenshots/login-page.png)
-- **User Registration**  
   ![User Registration](screenshots/user-register.png)
-- ** Forgot Password**
   ![User Forgot Password](screenshots/user-forgot-password.png)
+  ![User Forgot Password2](screenshots/user-forgot-password-dark-mode.png)
 
 ### 🎯 Dashboards
-- **Landing Page**  
   ![Landing Page](screenshots/landing-page.png)
+  ![Error 404 Page](screenshots/404-error.png)
+  ![Error 403 Page](screenshots/403-error.png)
+  ![Dashboard](screenshots/Tasks%20dashboard%20-%20admin%20role.png)
+  ![Dashboard](screenshots/Tasks%20dashboard%20-%20admin%20role%202.png)
+  ![Dashboard](screenshots/Tasks%20dashboard%20-%20admin%20role%203.png)
+  ![Dashboard](screenshots/Tasks%20dashboard%20-%20admin%20role%202.png)
+  ![Dashboard](screenshots/Tasks%20dashboard%20-%20user%20role.png)
+  ![Dashboard](screenshots/updatable-taskss.png)
+  ![Dashboard](screenshots/task-form.png)
+  ![Dashboard](screenshots/new-task-form.png)
+  ![Admin Panel - Users](screenshots/users-admin-panel.png)
+  ![Admin Panel - Tasks](screenshots/admin-tasks-panel.png)
+
+  
+
+
 
 
 ## 📄 License

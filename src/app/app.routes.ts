@@ -12,6 +12,8 @@ import {NewTaskComponent} from './components/tasks/new-task/new-task.component';
 import {TasksComponent} from './components/tasks/tasks/tasks.component';
 import {AdminTasksComponent} from './components/dashboard/admin-panel/admin-tasks/admin-tasks.component';
 import {AdminUsersComponent} from './components/dashboard/admin-panel/admin-users/admin-users.component';
+import {NotFoundPageComponent} from './components/ui/not-found-page/not-found-page.component';
+import {UnauthorizedPageComponent} from './components/ui/unauthorized-page/unauthorized-page.component';
 
 export const routes: Routes = [
   {
@@ -71,5 +73,18 @@ export const routes: Routes = [
         component: AdminUsersComponent
       }
     ]
-  }
+  },
+  {
+    path: 'page-not-found',
+    component: NotFoundPageComponent,
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedPageComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'page-not-found',
+    pathMatch: 'full',
+  },
 ];
